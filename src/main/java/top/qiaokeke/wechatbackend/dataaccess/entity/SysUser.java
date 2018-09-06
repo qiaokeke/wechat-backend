@@ -46,7 +46,7 @@ public class SysUser {
     private String shopId;
     private String shopName;
     private String shopUrl;
-
+    private String avatar;
     private String umark;
     private String mark;
 

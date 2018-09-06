@@ -21,8 +21,8 @@ public class SysUserRepositoryTest {
     public void SysUserSave(){
         for (int i=1;i<=100;i++) {
             SysUser sysUser = new SysUser();
-            sysUser.setUid(String.valueOf(i));
-            sysUser.setUpassword(String.valueOf(i));
+            sysUser.setUid("wechat"+String.valueOf(i));
+            sysUser.setUpassword("wechat"+String.valueOf(i));
             if(i<40)
                 sysUser.setUserType(UserType.WECHAT_USER);
             else if(i>80)
