@@ -20,6 +20,7 @@ public class Task {
     private String id;
 
     private String tId;
+    private String tSysUserId;
     private String tName;
     private String tGiftPicUrl;
     private String tTaobaoUrl;
@@ -33,7 +34,7 @@ public class Task {
     private String tMark;
     private String tReserve;
     private Date tUploadTime;
-    private Date tPreheatStartTime;
+    private Date tPreheatTime;
     private Date tPublishTime;
     private Date tFinishTime;
     private Date tUpdateTime;

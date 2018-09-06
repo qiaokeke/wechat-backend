@@ -33,9 +33,9 @@ public class SysUserController {
 
         boolean isAccess = sysUserService.checkUserByUidAndUpassword(loginMap.get("username"),loginMap.get("password"));
         if(!isAccess){
-            return new ResponseBean(ResponseConstants.RES_CODE_ILL_TOKEN,ResponseConstants.RES_MSG_ILL_TOKEN,null);
+            return new ResponseBean(ResponseConstants.RespCode.ILL_TOKEN,ResponseConstants.RespMsg.ILL_TOKEN,null);
         }
-        return new ResponseBean(ResponseConstants.RES_CODE_OK,ResponseConstants.RES_MSG_OK, JWTUtil.sign(loginMap.get("username"),loginMap.get("password")));
+        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK, JWTUtil.sign(loginMap.get("username"),loginMap.get("password")));
     }
 
 
@@ -45,7 +45,7 @@ public class SysUserController {
         String uid = JWTUtil.getUsername(token);
         SysUser sysUser = sysUserService.getSysUserByUid(uid);
         if (sysUser==null){
-            return new ResponseBean(ResponseConstants.RES_CODE_USER_NOT_FOUND,ResponseConstants.RES_MSG_USER_NOT_FOUND,null);
+            return new ResponseBean(ResponseConstants.RespCode.USER_NOT_FOUND,ResponseConstants.RespMsg.USER_NOT_FOUND,null);
         }
 
         // 转换用户视图
@@ -57,7 +57,7 @@ public class SysUserController {
         sysUserView.setAvatar(sysUser.getAvatar());
         sysUserView.setToken("token");
 
-        return new ResponseBean(ResponseConstants.RES_CODE_OK,ResponseConstants.RES_MSG_OK,sysUserView);
+        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,sysUserView);
 
     }
 
