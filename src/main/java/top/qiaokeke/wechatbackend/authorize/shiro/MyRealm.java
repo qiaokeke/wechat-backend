@@ -16,12 +16,17 @@ import org.springframework.stereotype.Service;
 import top.qiaokeke.wechatbackend.authorize.database.UserBean;
 import top.qiaokeke.wechatbackend.authorize.database.UserService;
 import top.qiaokeke.wechatbackend.authorize.util.JWTUtil;
+import top.qiaokeke.wechatbackend.dataaccess.entity.AuthUser;
+import top.qiaokeke.wechatbackend.dataaccess.entity.AuthUserRole;
 import top.qiaokeke.wechatbackend.dataaccess.entity.SysUser;
+import top.qiaokeke.wechatbackend.dataaccess.repository.AuthUserRepository;
+import top.qiaokeke.wechatbackend.dataaccess.repository.AuthUserRoleRepository;
 import top.qiaokeke.wechatbackend.dataaccess.repository.SysUserRepository;
 import top.qiaokeke.wechatbackend.dataaccess.service.ISysUserService;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -33,6 +38,12 @@ public class MyRealm extends AuthorizingRealm {
 
     @Autowired
     SysUserRepository sysUserRepository;
+
+    @Autowired
+    AuthUserRepository authUserRepository;
+
+    @Autowired
+    AuthUserRoleRepository authUserRoleRepository;
 
     private UserService userService;
 
@@ -55,11 +66,13 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = JWTUtil.getUsername(principals.toString());
-        SysUser sysUser = sysUserRepository.getSysUserByUid(username);
-
+        AuthUser authUser = authUserRepository.getAuthUserByAuid(username);
+        List<AuthUserRole> authUserRoles = authUserRoleRepository.getAuthUserRoleByAuid(username);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        logger.info("User type:{}",sysUser.getUserType().name());
-        simpleAuthorizationInfo.addRole(sysUser.getUserType().name());
+        for (AuthUserRole role: authUserRoles){
+            simpleAuthorizationInfo.addRole(role.getRoleType().name());
+        }
+
         //Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
         //simpleAuthorizationInfo.addStringPermissions(permission);
         return simpleAuthorizationInfo;
@@ -77,12 +90,12 @@ public class MyRealm extends AuthorizingRealm {
             throw new AuthenticationException("token invalid");
         }
 
-        SysUser sysUser = sysUserRepository.getSysUserByUid(username);
-        if(sysUser == null ){
+        AuthUser authUser = authUserRepository.getAuthUserByAuid(username);
+        if(authUser == null ){
             throw new AuthenticationException("User didn't existed!");
         }
 
-        if (! JWTUtil.verify(token, username, sysUser.getUpassword())) {
+        if (! JWTUtil.verify(token, username, authUser.getPassword())) {
             throw new AuthenticationException("Username or password error");
         }
 
