@@ -20,4 +20,12 @@ public interface ResponseConstants {
         public static final String USER_NOT_FOUND="[50021]user not found";
     }
 
+    public static class RespData{
+        public static final String ADD_SUCCESS="添加成功";
+        public static final String USER_EXIST="用户已存在";
+        public static final String ADD_FAIL="添加失败";
+
+
+    }
+
 }

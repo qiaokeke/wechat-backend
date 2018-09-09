@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.stereotype.Service;
-import top.qiaokeke.wechatbackend.dataaccess.entity.types.ActiveType;
+import top.qiaokeke.wechatbackend.dataaccess.entity.types.OrderStatus;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,19 +13,18 @@ import java.util.Date;
 @Setter
 @ToString
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"auid"})})
-public class AuthUser {
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"orderId"})})
+public class WechatOrder {
+
     @Id
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
-    private String auid;
-    private String password;
-    @Enumerated(EnumType.STRING)
-    private RoleType roleType;
-
-    private ActiveType isActive;
+    private String orderId;
+    private String tId;
+    private String wechaterId;
+    private OrderStatus orderStatus;
     private Date createTime;
     private Date updateTime;
 

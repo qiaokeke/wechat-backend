@@ -36,8 +36,6 @@ public class MyRealm extends AuthorizingRealm {
 
     Logger logger = LoggerFactory.getLogger(MyRealm.class);
 
-    @Autowired
-    SysUserRepository sysUserRepository;
 
     @Autowired
     AuthUserRepository authUserRepository;
@@ -66,7 +64,6 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = JWTUtil.getUsername(principals.toString());
-        AuthUser authUser = authUserRepository.getAuthUserByAuid(username);
         List<AuthUserRole> authUserRoles = authUserRoleRepository.getAuthUserRoleByAuid(username);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         for (AuthUserRole role: authUserRoles){

@@ -6,4 +6,5 @@ import top.qiaokeke.wechatbackend.dataaccess.entity.AuthUser;
 
 public interface AuthUserRepository extends CrudRepository<AuthUser,String> {
     public AuthUser getAuthUserByAuid(String auid);
+    public boolean existsByAuid(String auid);
 }
