@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface SellerRepository extends CrudRepository<Seller,String> {
     List<Seller> getAllByIsActive(ActiveType isActive);
-    
+    boolean existsByAuid(String auid);
 }
