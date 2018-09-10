@@ -17,8 +17,10 @@ public class IdStrategy {
         return buildIdbyPrefix(IdConstants.ORDER_ID_PREFIX);
     }
 
+    public static String buildOssImgId(){return buildIdbyPrefix(IdConstants.OSS_IMG_ID_PREFIX);}
+
     private static String buildIdbyPrefix(String prefix){
-        int tail = (int) (Math.random()*10000);
+        int tail = (int) (Math.random()*9000+1000);
         return prefix+Format.yyyyMMddHHmmssDate(new Date())+String.format("%4d",tail);
     }
 }
