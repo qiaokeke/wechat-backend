@@ -15,4 +15,9 @@ public interface ITaskService {
     public boolean isExistByTaskId(String taskId);
     public boolean saveTask(Task task);
     public ResponsePage getPublishPageTasks(Date date, Pageable pageable);
+    public ResponsePage getPreheatPageTasks(Date date, Pageable pageable);
+    public ResponsePage getPreStartPageTasks(Date date,Pageable pageable);
+    public ResponsePage getAfterFinishPageTasks(Date date,Pageable pageable);
+    public ResponsePage getPageTasksByTaskId(String taskId,Pageable pageable);
+    public ResponsePage getPageTasksBySellerId(String sellerId,Pageable pageable);
 }

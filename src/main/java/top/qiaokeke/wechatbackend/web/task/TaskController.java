@@ -1,5 +1,6 @@
 package top.qiaokeke.wechatbackend.web.task;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +44,26 @@ public class TaskController {
         return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,publishTasks);
     }
 
-    @GetMapping("/publishPageTasks")
+    @GetMapping("/pageTasks")
     public ResponseBean getPublishTasksByPage(@RequestParam int page,@RequestParam int size,@RequestParam(required = false) String taskId,@RequestParam(required = false) String sellerId,@RequestParam(required = false) String taskStatus){
         Pageable pageable = new PageRequest(page-1,size);
-        ResponsePage responsePage;
-
-        responsePage = taskService.getPublishPageTasks(new Date(),pageable);
+        ResponsePage responsePage = null;
+        if(taskId!=null && !taskId.equals("")){
+            responsePage = taskService.getPageTasksByTaskId(taskId,pageable);
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,responsePage);
+        }
+        if(sellerId!=null && !sellerId.equals("")){
+            responsePage = taskService.getPageTasksBySellerId(sellerId,pageable);
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,responsePage);
+        }
+        if(taskStatus.equals("未开始"))
+            responsePage = taskService.getPreStartPageTasks(new Date(),pageable);
+        if(taskStatus.equals("预热中"))
+            responsePage = taskService.getPreheatPageTasks(new Date(),pageable);
+        if(taskStatus.equals("已发布"))
+            responsePage = taskService.getPublishPageTasks(new Date(),pageable);
+        if(taskStatus.equals("已结束"))
+            responsePage = taskService.getAfterFinishPageTasks(new Date(),pageable);
 
         return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,responsePage);
     }

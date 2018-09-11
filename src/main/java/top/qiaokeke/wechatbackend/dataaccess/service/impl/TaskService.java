@@ -21,6 +21,7 @@ import java.util.List;
 @Service
 public class TaskService implements ITaskService {
 
+
     Logger logger = LoggerFactory.getLogger(TaskService.class);
 
     @Autowired
@@ -75,8 +76,78 @@ public class TaskService implements ITaskService {
             logger.error("get publish page tasks error:{}",e);
             return null;
         }
-        List<TaskView> taskViews = new LinkedList<>();
+        List<TaskView> taskViews = taskPage2Views(tasks);
+        return new ResponsePage(tasks.getTotalElements(),taskViews);
+    }
 
+    @Override
+    public ResponsePage getPreheatPageTasks(Date date, Pageable pageable) {
+        Page<Task> tasks;
+        try {
+            tasks = taskRepository.getAllByTPreheatTimeBeforeAndTPublishTimeAfter(date, date, pageable);
+        }catch (Exception e){
+            logger.error("get preheat page tasks error:{}",e);
+            return null;
+        }
+        List<TaskView> taskViews = taskPage2Views(tasks);
+        return new ResponsePage(tasks.getTotalElements(),taskViews);
+    }
+
+    @Override
+    public ResponsePage getPreStartPageTasks(Date date, Pageable pageable) {
+        Page<Task> tasks;
+        try {
+            tasks = taskRepository.getAllByTPreheatTimeAfter(date, pageable);
+        }catch (Exception e){
+            logger.error("get pre start page tasks error:{}",e);
+            return null;
+        }
+        List<TaskView> taskViews = taskPage2Views(tasks);
+        return new ResponsePage(tasks.getTotalElements(),taskViews);
+    }
+
+    @Override
+    public ResponsePage getAfterFinishPageTasks(Date date, Pageable pageable) {
+        Page<Task> tasks;
+        try {
+            tasks = taskRepository.getAllByTFinishTimeBefore(date, pageable);
+        }catch (Exception e){
+            logger.error("get after finish page tasks error:{}",e);
+            return null;
+        }
+        List<TaskView> taskViews = taskPage2Views(tasks);
+        return new ResponsePage(tasks.getTotalElements(),taskViews);
+    }
+
+    @Override
+    public ResponsePage getPageTasksByTaskId(String taskId, Pageable pageable) {
+        Page<Task> tasks;
+        try {
+            tasks = taskRepository.getAllByTId(taskId, pageable);
+        }catch (Exception e){
+            logger.error("get after taskid page tasks error:{}",e);
+            return null;
+        }
+        List<TaskView> taskViews = taskPage2Views(tasks);
+        return new ResponsePage(tasks.getTotalElements(),taskViews);
+    }
+
+
+    @Override
+    public ResponsePage getPageTasksBySellerId(String sellerId, Pageable pageable) {
+        Page<Task> tasks;
+        try {
+            tasks = taskRepository.getAllByTId(sellerId, pageable);
+        }catch (Exception e){
+            logger.error("get after sellerid page tasks error:{}",e);
+            return null;
+        }
+        List<TaskView> taskViews = taskPage2Views(tasks);
+        return new ResponsePage(tasks.getTotalElements(),taskViews);
+    }
+
+    private List<TaskView> taskPage2Views(Page<Task> tasks){
+        List<TaskView> taskViews = new LinkedList<>();
         for(Task task: tasks){
             TaskView taskView = new TaskView();
             taskView.setTId(task.getTId());
@@ -94,7 +165,7 @@ public class TaskService implements ITaskService {
             taskViews.add(taskView);
         }
 
-        return new ResponsePage(tasks.getTotalElements(),taskViews);
+        return taskViews;
     }
 
     private List<TaskView> tasks2TaskViews(List<Task> tasks){
