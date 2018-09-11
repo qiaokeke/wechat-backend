@@ -3,7 +3,6 @@ package top.qiaokeke.wechatbackend.utils.strategy;
 import top.qiaokeke.wechatbackend.utils.constants.IdConstants;
 import top.qiaokeke.wechatbackend.utils.date.Format;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class IdStrategy {
@@ -21,6 +20,6 @@ public class IdStrategy {
 
     private static String buildIdbyPrefix(String prefix){
         int tail = (int) (Math.random()*9000+1000);
-        return prefix+Format.yyyyMMddHHmmssDate(new Date())+String.format("%4d",tail);
+        return prefix+Format.yyyyMMddHHmmssDateString(new Date())+String.format("%4d",tail);
     }
 }

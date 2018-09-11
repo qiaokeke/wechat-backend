@@ -27,6 +27,11 @@ public class SellerService implements ISellerService {
     }
 
     @Override
+    public boolean isExistByAuid(String auid) {
+        return sellerRepository.existsByAuid(auid);
+    }
+
+    @Override
     public boolean save(Seller seller) {
         try {
             sellerRepository.save(seller);

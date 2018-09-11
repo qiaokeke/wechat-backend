@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ISellerService {
     public boolean isExist(Seller seller);
+    public boolean isExistByAuid(String auid);
     public boolean save(Seller seller);
     public List<SellerView> getAllSellerViewsByActive(ActiveType activeType);
+
 }

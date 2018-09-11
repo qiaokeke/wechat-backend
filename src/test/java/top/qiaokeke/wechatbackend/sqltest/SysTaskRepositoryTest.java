@@ -6,6 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.qiaokeke.wechatbackend.dataaccess.entity.Task;
 import top.qiaokeke.wechatbackend.dataaccess.repository.TaskRepository;
@@ -69,5 +72,17 @@ public class SysTaskRepositoryTest {
         List<Task> atasks = taskRepository.getTasksByTPublishTimeBeforeAndTFinishTimeAfter(new Date(),new Date());
         for (Task task: atasks)
             logger.info("pub task:{}",task);
+    }
+
+    @Test
+    public void testPageTasks(){
+        Pageable pageable = new PageRequest(0,30);
+        Page<Task> tasks = taskRepository.getAllByTPublishTimeBeforeAndTFinishTimeAfter(new Date(),new Date(),pageable);
+        logger.info("pages:{}",tasks);
+        logger.info("total pages:{}",tasks.getTotalPages());
+        logger.info("total elements:{}",tasks.getTotalElements());
+        for (Task task : tasks){
+            logger.info("task:{}",task);
+        }
     }
 }
