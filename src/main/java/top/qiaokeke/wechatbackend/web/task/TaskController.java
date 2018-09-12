@@ -1,10 +1,8 @@
 package top.qiaokeke.wechatbackend.web.task;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +54,7 @@ public class TaskController {
             responsePage = taskService.getPageTasksBySellerId(sellerId,pageable);
             return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,responsePage);
         }
+
         if(taskStatus.equals("未开始"))
             responsePage = taskService.getPreStartPageTasks(new Date(),pageable);
         if(taskStatus.equals("预热中"))
@@ -91,9 +90,9 @@ public class TaskController {
         task.setTGift(gift);
         task.setTGiftPicUrl(giftPicUrl);
         try {
-            task.setTPreheatTime(Format.datatimeString2Date(preheatTime));
-            task.setTPublishTime(Format.datatimeString2Date(publishTime));
-            task.setTFinishTime(Format.datatimeString2Date(finishTime));
+            task.setTPreheatTime(Format.datetimeString2Date(preheatTime));
+            task.setTPublishTime(Format.datetimeString2Date(publishTime));
+            task.setTFinishTime(Format.datetimeString2Date(finishTime));
         }catch (Exception e){
             logger.error("parse date:{}",e);
             return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"日期格式错误");
@@ -110,5 +109,46 @@ public class TaskController {
         return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"添加成功");
     }
 
+    @PostMapping("/update")
+    public ResponseBean updateTask(@RequestBody  Map<String,String> map){
+        String tid = map.get("tid");
+        String tname = map.get("tname");
+        String tsellerId = map.get("tsellerId");
+        String tgift = map.get("tgift");
+        String tgiftPicUrl = map.get("tgiftPicUrl");
+        String tpreheatTime = map.get("tpreheatTime");
+        String tpublishTime = map.get("tpublishTime");
+        String tfinishTime = map.get("tfinishTime ");
+        String tprogress = map.get("tprogress");
+        String ttotal = map.get("ttotal");
+        String tchargeAmout = map.get("tchargeAmout");
+
+        Task task = taskService.getTaskByTId(tid);
+
+        if(task==null)
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"该任务不存在，更新失败");
+
+        task.setTName(tname);
+        task.setTSellerId(tsellerId);
+        task.setTGift(tgift);
+        task.setTGiftPicUrl(tgiftPicUrl);
+        task.setTChargeAmout(tchargeAmout);
+        task.setTTotal(Integer.parseInt(ttotal));
+        task.setTProgress(Integer.parseInt(tprogress));
+        try {
+            task.setTPreheatTime(Format.datetimeString2Date(tpreheatTime));
+            task.setTPublishTime(Format.datetimeString2Date(tpublishTime));
+            task.setTFinishTime(Format.datetimeString2Date(tfinishTime));
+        }catch (Exception e){
+            logger.error("update time error:{}",e);
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"日期格式错误");
+        }
+        task.setTUploadTime(new Date());
+
+        if(!taskService.saveTask(task))
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"网络错误");
+        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"添加成功");
+
+    }
 
 }

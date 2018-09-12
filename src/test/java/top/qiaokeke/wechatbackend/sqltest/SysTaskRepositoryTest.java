@@ -84,5 +84,7 @@ public class SysTaskRepositoryTest {
         for (Task task : tasks){
             logger.info("task:{}",task);
         }
+
+
     }
 }

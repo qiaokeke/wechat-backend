@@ -28,6 +28,11 @@ public class TaskService implements ITaskService {
     TaskRepository taskRepository;
 
     @Override
+    public Task getTaskByTId(String tId) {
+        return taskRepository.getTaskByTId(tId);
+    }
+
+    @Override
     public List<TaskView> getPreheatTasks(Date date) {
         List<Task> tasks;
         try {
@@ -137,7 +142,7 @@ public class TaskService implements ITaskService {
     public ResponsePage getPageTasksBySellerId(String sellerId, Pageable pageable) {
         Page<Task> tasks;
         try {
-            tasks = taskRepository.getAllByTId(sellerId, pageable);
+            tasks = taskRepository.getAllByTSellerId(sellerId, pageable);
         }catch (Exception e){
             logger.error("get after sellerid page tasks error:{}",e);
             return null;

@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface ITaskService {
+
+    public Task getTaskByTId(String tId);
     public List<TaskView> getPreheatTasks(Date date);
     public List<TaskView> getPublishTasks(Date date);
     public boolean isExistByTaskId(String taskId);

@@ -19,7 +19,7 @@ public class Format {
         return format.parse(datetimeString);
     }
 
-    public static Date datatimeString2Date(String datetime) throws ParseException {
+    public static Date datetimeString2Date(String datetime) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.parse(datetime);
     }
