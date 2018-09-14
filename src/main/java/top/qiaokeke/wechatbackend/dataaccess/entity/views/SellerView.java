@@ -9,14 +9,14 @@ import lombok.ToString;
 @ToString
 public class SellerView {
 
-    String auid;
-    String username;
-    String shopName;
-    String shopUrl;
-    String wechatId;
-    String wechatName;
-    String qqId;
-    String qqName;
-    String phoneNumber;
+    String sellerId;
+    String sellerName;
+    String sellerShopName;
+    String sellerShopUrl;
+    String sellerWechatId;
+    String sellerWechatName;
+    String sellerQQId;
+    String sellerQQName;
+    String sellerPhoneNumber;
 
 }

@@ -151,6 +151,17 @@ public class TaskService implements ITaskService {
         return new ResponsePage(tasks.getTotalElements(),taskViews);
     }
 
+    @Override
+    public boolean deleteTask(Task task) {
+        try {
+            taskRepository.delete(task);
+        }catch (Exception e){
+            logger.error("delete task error :{}",e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
     private List<TaskView> taskPage2Views(Page<Task> tasks){
         List<TaskView> taskViews = new LinkedList<>();
         for(Task task: tasks){

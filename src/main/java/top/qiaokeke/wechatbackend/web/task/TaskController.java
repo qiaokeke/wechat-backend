@@ -63,23 +63,22 @@ public class TaskController {
             responsePage = taskService.getPublishPageTasks(new Date(),pageable);
         if(taskStatus.equals("已结束"))
             responsePage = taskService.getAfterFinishPageTasks(new Date(),pageable);
-
         return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,responsePage);
     }
 
     @PostMapping("/add")
     public ResponseBean addTask(@RequestBody Map<String,String> map){
 
-        String taskId = map.get("taskId");
-        String taskName = map.get("taskName");
-        String sellerId = map.get("sellerId");
-        String chargeAmount = map.get("chargeAmount");
-        String taskAmount = map.get("taskAmount");
-        String gift = map.get("gift");
-        String giftPicUrl = map.get("giftPicUrl ");
-        String preheatTime = map.get("preheatTime");
-        String publishTime = map.get("publishTime");
-        String finishTime = map.get("finishTime");
+        String taskId = map.get("tid");
+        String taskName = map.get("tname");
+        String sellerId = map.get("tsellerId");
+        String chargeAmount = map.get("tchargeAmout");
+        String taskAmount = map.get("ttotal");
+        String gift = map.get("tgift");
+        String giftPicUrl = map.get("tgiftPicUrl");
+        String preheatTime = map.get("tpreheatTime");
+        String publishTime = map.get("tpublishTime");
+        String finishTime = map.get("tfinishTime");
 
         Task task = new Task();
         task.setTId(taskId);
@@ -118,7 +117,7 @@ public class TaskController {
         String tgiftPicUrl = map.get("tgiftPicUrl");
         String tpreheatTime = map.get("tpreheatTime");
         String tpublishTime = map.get("tpublishTime");
-        String tfinishTime = map.get("tfinishTime ");
+        String tfinishTime = map.get("tfinishTime");
         String tprogress = map.get("tprogress");
         String ttotal = map.get("ttotal");
         String tchargeAmout = map.get("tchargeAmout");
@@ -147,8 +146,18 @@ public class TaskController {
 
         if(!taskService.saveTask(task))
             return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"网络错误");
-        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"添加成功");
+        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"更新成功");
 
     }
 
+    @PostMapping("/delete")
+    public ResponseBean deleteTask(@RequestBody Map<String,String> map){
+        String tid = map.get("tid");
+        Task task = taskService.getTaskByTId(tid);
+        if(task==null)
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"该任务不存在，删除失败");
+        if(!taskService.deleteTask(task))
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"网络错误，删除失败");
+        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"删除成功");
+    }
 }

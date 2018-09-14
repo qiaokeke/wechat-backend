@@ -20,6 +20,7 @@ public class Format {
     }
 
     public static Date datetimeString2Date(String datetime) throws ParseException {
+        System.out.println(datetime);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.parse(datetime);
     }

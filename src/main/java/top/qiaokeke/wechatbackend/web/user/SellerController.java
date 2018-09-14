@@ -2,9 +2,12 @@ package top.qiaokeke.wechatbackend.web.user;
 
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import top.qiaokeke.wechatbackend.common.bean.ResponseBean;
 import top.qiaokeke.wechatbackend.common.bean.ResponseConstants;
+import top.qiaokeke.wechatbackend.common.bean.ResponsePage;
 import top.qiaokeke.wechatbackend.dataaccess.entity.RoleType;
 import top.qiaokeke.wechatbackend.dataaccess.entity.Seller;
 import top.qiaokeke.wechatbackend.dataaccess.entity.types.ActiveType;
@@ -42,14 +45,14 @@ public class SellerController {
     public ResponseBean addInfo(@RequestBody Map<String,String > infoMap){
 
         String auid = infoMap.get("userid");
-        String username = infoMap.get("username");
-        String shopName = infoMap.get("shopName");
-        String shopUrl = infoMap.get("shopUrl");
-        String wechatId = infoMap.get("wechatId");
-        String wechatName = infoMap.get("wechatName");
-        String qqId = infoMap.get("qqId");
-        String qqName = infoMap.get("qqName");
-        String phoneNumber = infoMap.get("phoneNumber");
+        String username = infoMap.get("sellerName");
+        String shopName = infoMap.get("sellerShopName");
+        String shopUrl = infoMap.get("sellerShopUrl");
+        String wechatId = infoMap.get("sellerWechatId");
+        String wechatName = infoMap.get("sellerWechatName");
+        String qqId = infoMap.get("sellerQQId");
+        String qqName = infoMap.get("sellerQQName");
+        String phoneNumber = infoMap.get("sellerPhoneNumber");
 
         Seller seller = new Seller();
         seller.setAuid(auid);
@@ -78,6 +81,17 @@ public class SellerController {
     public ResponseBean getSellerViews(){
         List views = sellerService.getAllSellerViewsByActive(ActiveType.TRUE);
         return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,views);
+    }
+
+    @GetMapping("/pageSellers")
+    public ResponseBean getPageSellers(@RequestParam int page,@RequestParam int size){
+        Pageable pageable = new PageRequest(page-1,size);
+        ResponsePage responsePage = null;
+
+
+
+        responsePage = sellerService.getAllPageSellerViewsByActive(ActiveType.TRUE,pageable);
+        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,responsePage);
     }
 
 

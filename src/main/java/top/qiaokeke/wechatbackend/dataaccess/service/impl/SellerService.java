@@ -3,7 +3,10 @@ package top.qiaokeke.wechatbackend.dataaccess.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import top.qiaokeke.wechatbackend.common.bean.ResponsePage;
 import top.qiaokeke.wechatbackend.dataaccess.entity.Seller;
 import top.qiaokeke.wechatbackend.dataaccess.entity.types.ActiveType;
 import top.qiaokeke.wechatbackend.dataaccess.entity.views.SellerView;
@@ -45,23 +48,86 @@ public class SellerService implements ISellerService {
     @Override
     public List<SellerView> getAllSellerViewsByActive(ActiveType activeType) {
         List<Seller> sellers = sellerRepository.getAllByIsActive(activeType);
+        List<SellerView> sellerViews = sellerList2SellerViews(sellers);
+
+        return sellerViews;
+    }
+
+    @Override
+    public ResponsePage getAllPageSellerViewsByActive(ActiveType activeType, Pageable pageable) {
+        Page<Seller> sellers = null;
+        try {
+            sellers = sellerRepository.getAllByIsActive(ActiveType.TRUE, pageable);
+        }catch (Exception e){
+            logger.error("select all sellers error:{}",e.getMessage());
+        }
+        List<SellerView> sellerViews = sellerPages2SellerViews(sellers);
+
+        return new ResponsePage(sellers.getTotalElements(),sellerViews);
+    }
+
+    @Override
+    public ResponsePage getAllPageSellerViewsBySellerId(String sellerId, Pageable pageable) {
+        Page<Seller> sellers = null;
+        try {
+            sellers = sellerRepository.getAllBySellerId(sellerId, pageable);
+        }catch (Exception e){
+            logger.error("select seller sellers error:{}",e.getMessage());
+        }
+        List<SellerView> sellerViews = sellerPages2SellerViews(sellers);
+
+        return new ResponsePage(sellers.getTotalElements(),sellerViews);
+    }
+
+    @Override
+    public ResponsePage getAllPageSellerViewsBySellerName(String sellerName, Pageable pageable) {
+        Page<Seller> sellers = null;
+        try {
+            sellers = sellerRepository.getAllBySellerName(sellerName, pageable);
+        }catch (Exception e){
+            logger.error("select seller sellers error:{}",e.getMessage());
+        }
+        List<SellerView> sellerViews = sellerPages2SellerViews(sellers);
+
+        return new ResponsePage(sellers.getTotalElements(),sellerViews);
+    }
+
+
+    private List<SellerView> sellerPages2SellerViews(Page<Seller> sellers){
         List<SellerView> sellerViews = new LinkedList<>();
 
         for(Seller seller: sellers){
             SellerView view = new SellerView();
-            view.setAuid(seller.getAuid());
-            view.setUsername(seller.getSellerName());
-            view.setShopName(seller.getSellerShopName());
-            view.setShopUrl(seller.getSellerShopUrl());
-            view.setWechatId(seller.getSellerWechatId());
-            view.setWechatName(seller.getSellerWechatName());
-            view.setQqId(seller.getSellerQQId());
-            view.setQqName(seller.getSellerQQName());
-            view.setPhoneNumber(seller.getSellerPhoneNumber());
+            view.setSellerId(seller.getAuid());
+            view.setSellerName(seller.getSellerName());
+            view.setSellerShopName(seller.getSellerShopName());
+            view.setSellerShopUrl(seller.getSellerShopUrl());
+            view.setSellerWechatId(seller.getSellerWechatId());
+            view.setSellerWechatName(seller.getSellerWechatName());
+            view.setSellerQQId(seller.getSellerQQId());
+            view.setSellerQQName(seller.getSellerQQName());
+            view.setSellerPhoneNumber(seller.getSellerPhoneNumber());
             sellerViews.add(view);
         }
         return sellerViews;
     }
 
+    private List<SellerView> sellerList2SellerViews(List<Seller> sellers){
+        List<SellerView> sellerViews = new LinkedList<>();
 
+        for(Seller seller: sellers){
+            SellerView view = new SellerView();
+            view.setSellerId(seller.getAuid());
+            view.setSellerName(seller.getSellerName());
+            view.setSellerShopName(seller.getSellerShopName());
+            view.setSellerShopUrl(seller.getSellerShopUrl());
+            view.setSellerWechatId(seller.getSellerWechatId());
+            view.setSellerWechatName(seller.getSellerWechatName());
+            view.setSellerQQId(seller.getSellerQQId());
+            view.setSellerQQName(seller.getSellerQQName());
+            view.setSellerPhoneNumber(seller.getSellerPhoneNumber());
+            sellerViews.add(view);
+        }
+        return sellerViews;
+    }
 }

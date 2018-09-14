@@ -19,4 +19,5 @@ public interface TaskRepository extends CrudRepository<Task,String> {
     public Page<Task> getAllByTFinishTimeBefore(Date date,Pageable pageable);
     public Page<Task> getAllByTId(String taskId,Pageable pageable);
     public Page<Task> getAllByTSellerId(String sellerId,Pageable pageable);
+
 }

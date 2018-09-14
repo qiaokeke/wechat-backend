@@ -10,8 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
+import top.qiaokeke.wechatbackend.common.bean.ResponsePage;
 import top.qiaokeke.wechatbackend.dataaccess.entity.Task;
+import top.qiaokeke.wechatbackend.dataaccess.entity.views.TaskView;
 import top.qiaokeke.wechatbackend.dataaccess.repository.TaskRepository;
+import top.qiaokeke.wechatbackend.dataaccess.service.impl.TaskService;
 import top.qiaokeke.wechatbackend.utils.strategy.IdStrategy;
 
 import java.util.Date;
@@ -25,6 +28,9 @@ public class SysTaskRepositoryTest {
 
     @Autowired
     TaskRepository taskRepository;
+
+    @Autowired
+    TaskService taskService;
 
     @Test
     public void testSaveTashs(){
@@ -86,5 +92,14 @@ public class SysTaskRepositoryTest {
         }
 
 
+    }
+
+    @Test
+    public void testAfterFinishTasks(){
+        Pageable pageable = new PageRequest(0,20);
+
+        ResponsePage responsePage = taskService.getAfterFinishPageTasks(new Date(),pageable);
+
+        logger.info("page:{}",responsePage);
     }
 }

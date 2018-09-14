@@ -22,4 +22,5 @@ public interface ITaskService {
     public ResponsePage getAfterFinishPageTasks(Date date,Pageable pageable);
     public ResponsePage getPageTasksByTaskId(String taskId,Pageable pageable);
     public ResponsePage getPageTasksBySellerId(String sellerId,Pageable pageable);
+    public boolean deleteTask(Task task);
 }

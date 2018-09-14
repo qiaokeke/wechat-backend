@@ -36,7 +36,7 @@ public class WebController {
     }
 
     @PostMapping("/login")
-    public ResponseBean login(@RequestParam("username") String username,
+    public ResponseBean login(@RequestParam("sellerName") String username,
                               @RequestParam("password") String password) {
 
         if (sysUserService.checkUserByUidAndUpassword(username,password)) {
