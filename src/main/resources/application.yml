@@ -1,0 +1,7 @@
+wx:
+  mp:
+    configs:
+      - appId: wxbd140862c4f2afc6
+        secret: b18acd62149c23e655b1cc851df6655d
+        token: qiaokeke
+        aesKey: JvPkIH9PYtsfO63A141NAtxU8CwhFEZSqZxBwNFh6lq
