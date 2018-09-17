@@ -19,6 +19,7 @@ import java.util.List;
 @Service
 public class SellerService implements ISellerService {
 
+
     Logger logger = LoggerFactory.getLogger(SellerService.class);
 
     @Autowired
@@ -92,13 +93,62 @@ public class SellerService implements ISellerService {
         return new ResponsePage(sellers.getTotalElements(),sellerViews);
     }
 
+    @Override
+    public Seller getSellerBySellerId(String sellerId) {
+        Seller seller=null;
+        try {
+            seller = sellerRepository.getSellerBySellerId(sellerId);
+        }catch (Exception e){
+            logger.error("getSellerBySellerId error:{}",e.getMessage());
+        }
+        return seller;
+    }
+
+    @Override
+    public ResponsePage getAllPageSellerViewsBySellerIdLike(String sellerId, Pageable pageable) {
+        Page<Seller> sellers = null;
+        try {
+            sellers = sellerRepository.getAllBySellerIdLike(sellerId, pageable);
+        }catch (Exception e){
+            logger.error("select seller sellers error:{}",e.getMessage());
+        }
+        List<SellerView> sellerViews = sellerPages2SellerViews(sellers);
+
+        return new ResponsePage(sellers.getTotalElements(),sellerViews);
+    }
+
+    @Override
+    public ResponsePage getAllPageSellerViewsBySellerNameLike(String sellerName, Pageable pageable) {
+        Page<Seller> sellers = null;
+        try {
+            sellers = sellerRepository.getAllBySellerNameLike(sellerName, pageable);
+        }catch (Exception e){
+            logger.error("select seller sellers error:{}",e.getMessage());
+        }
+        List<SellerView> sellerViews = sellerPages2SellerViews(sellers);
+
+        return new ResponsePage(sellers.getTotalElements(),sellerViews);
+    }
+
+    @Override
+    public boolean deleteSeller(Seller seller) {
+
+        try {
+            sellerRepository.delete(seller);
+        }catch (Exception e){
+            logger.error("deleteSeller error:{}",e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
 
     private List<SellerView> sellerPages2SellerViews(Page<Seller> sellers){
         List<SellerView> sellerViews = new LinkedList<>();
 
         for(Seller seller: sellers){
             SellerView view = new SellerView();
-            view.setSellerId(seller.getAuid());
+            view.setSellerId(seller.getSellerId());
             view.setSellerName(seller.getSellerName());
             view.setSellerShopName(seller.getSellerShopName());
             view.setSellerShopUrl(seller.getSellerShopUrl());
@@ -117,7 +167,7 @@ public class SellerService implements ISellerService {
 
         for(Seller seller: sellers){
             SellerView view = new SellerView();
-            view.setSellerId(seller.getAuid());
+            view.setSellerId(seller.getSellerId());
             view.setSellerName(seller.getSellerName());
             view.setSellerShopName(seller.getSellerShopName());
             view.setSellerShopUrl(seller.getSellerShopUrl());

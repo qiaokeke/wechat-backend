@@ -16,5 +16,9 @@ public interface ISellerService {
     public ResponsePage getAllPageSellerViewsByActive(ActiveType activeType, Pageable pageable);
     public ResponsePage getAllPageSellerViewsBySellerId(String sellerId,Pageable pageable);
     public ResponsePage getAllPageSellerViewsBySellerName(String sellerName,Pageable pageable);
+    public Seller getSellerBySellerId(String sellerId);
+    public ResponsePage getAllPageSellerViewsBySellerIdLike(String sellerId,Pageable pageable);
+    public ResponsePage getAllPageSellerViewsBySellerNameLike(String sellerName,Pageable pageable);
+    public boolean deleteSeller(Seller seller);
 
 }

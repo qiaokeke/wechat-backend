@@ -74,7 +74,7 @@ public class AuthUserRepositoryTest {
 
     static Seller buildSeller(int i){
         Seller seller = new Seller();
-        seller.setAuid("auth@"+String.valueOf(10000+i));
+        seller.setAuid("seller@"+String.valueOf(10000+i));
         seller.setSellerId("seller"+String.valueOf(10000+i));
         seller.setSellerName("seller"+String.valueOf(10000+i));
         seller.setIsActive(ActiveType.TRUE);

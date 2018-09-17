@@ -11,8 +11,10 @@ import top.qiaokeke.wechatbackend.common.bean.ResponsePage;
 import top.qiaokeke.wechatbackend.dataaccess.entity.RoleType;
 import top.qiaokeke.wechatbackend.dataaccess.entity.Seller;
 import top.qiaokeke.wechatbackend.dataaccess.entity.types.ActiveType;
+import top.qiaokeke.wechatbackend.dataaccess.entity.views.SellerView;
 import top.qiaokeke.wechatbackend.dataaccess.service.IAuthUserService;
 import top.qiaokeke.wechatbackend.dataaccess.service.ISellerService;
+import top.qiaokeke.wechatbackend.dataaccess.service.impl.SellerService;
 
 import java.util.Date;
 import java.util.List;
@@ -84,15 +86,72 @@ public class SellerController {
     }
 
     @GetMapping("/pageSellers")
-    public ResponseBean getPageSellers(@RequestParam int page,@RequestParam int size){
+    public ResponseBean getPageSellers(@RequestParam int page,@RequestParam int size,@RequestParam(required = false)String sellerId,@RequestParam(required = false) String sellerName){
         Pageable pageable = new PageRequest(page-1,size);
         ResponsePage responsePage = null;
-
-
+        if(sellerId!=null) {
+            sellerId="%"+sellerId+"%";
+            return new ResponseBean(ResponseConstants.RespCode.Ok, ResponseConstants.RespMsg.OK, sellerService.getAllPageSellerViewsBySellerIdLike(sellerId, pageable));
+        }
+        if(sellerName!=null) {
+            sellerName="%"+sellerName+"%";
+            return new ResponseBean(ResponseConstants.RespCode.Ok, ResponseConstants.RespMsg.OK, sellerService.getAllPageSellerViewsBySellerNameLike(sellerName, pageable));
+        }
 
         responsePage = sellerService.getAllPageSellerViewsByActive(ActiveType.TRUE,pageable);
         return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,responsePage);
     }
 
+    @PostMapping("/update")
+    public ResponseBean updateSeller(@RequestBody SellerView sellerView){
+
+        Seller seller = sellerService.getSellerBySellerId(sellerView.getSellerId());
+        if(seller==null)
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"卖家不存在");
+        sellerView2Seller(sellerView,seller);
+        seller.setUpdateTime(new Date());
+        if(!sellerService.save(seller))
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"网络错误");
+        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"更新成功");
+    }
+
+    @PostMapping("/create")
+    public ResponseBean createSeller(@RequestBody SellerView sellerView){
+        if(sellerService.isExistByAuid(sellerView.getSellerId()))
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"卖家已存在");
+
+        Seller seller = new Seller();
+        sellerView2Seller(sellerView,seller);
+        seller.setUpdateTime(new Date());
+        seller.setCreateTime(new Date());
+        seller.setIsActive(ActiveType.TRUE);
+        if(!sellerService.save(seller))
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"网络错误");
+        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"添加成功");
+
+    }
+
+    @PostMapping("/delete")
+    public ResponseBean deleteTask(@RequestBody SellerView sellerView){
+        Seller seller = sellerService.getSellerBySellerId(sellerView.getSellerId());
+        if(seller==null)
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"卖家不存在，删除失败");
+        if(!sellerService.deleteSeller(seller))
+            return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"网络错误，删除失败");
+        return new ResponseBean(ResponseConstants.RespCode.Ok,ResponseConstants.RespMsg.OK,"删除成功");
+    }
+
+    private void sellerView2Seller(SellerView sellerView,Seller seller){
+        seller.setAuid(sellerView.getSellerId());
+        seller.setSellerId(sellerView.getSellerId());
+        seller.setSellerName(sellerView.getSellerName());
+        seller.setSellerShopName(sellerView.getSellerShopName());
+        seller.setSellerShopUrl(sellerView.getSellerShopUrl());
+        seller.setSellerWechatId(sellerView.getSellerWechatId());
+        seller.setSellerWechatName(sellerView.getSellerWechatName());
+        seller.setSellerQQId(sellerView.getSellerQQId());
+        seller.setSellerQQName(sellerView.getSellerQQName());
+        seller.setSellerPhoneNumber(sellerView.getSellerPhoneNumber());
+    }
 
 }

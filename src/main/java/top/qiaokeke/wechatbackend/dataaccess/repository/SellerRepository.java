@@ -12,6 +12,10 @@ public interface SellerRepository extends CrudRepository<Seller,String> {
     List<Seller> getAllByIsActive(ActiveType isActive);
     boolean existsByAuid(String auid);
     public Page<Seller> getAllBySellerId(String sellerId, Pageable pageable);
-    public Page<Seller> getAllBySellerName(String sellerId,Pageable pageable);
+    public Page<Seller> getAllBySellerName(String sellerName,Pageable pageable);
     public Page<Seller> getAllByIsActive(ActiveType activeType,Pageable pageable);
+    public Seller getSellerBySellerId(String sellerId);
+    public Page<Seller> getAllBySellerIdLike(String sellerId, Pageable pageable);
+    public Page<Seller> getAllBySellerNameLike(String sellerName,Pageable pageable);
+
 }
