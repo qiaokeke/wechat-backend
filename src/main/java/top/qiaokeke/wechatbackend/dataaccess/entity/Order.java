@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import top.qiaokeke.wechatbackend.dataaccess.entity.types.OrderStatus;
+import top.qiaokeke.wechatbackend.dataaccess.entity.types.StepStatus;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,10 +20,17 @@ public class Order {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
 
-    private String orderId;
+    private String oId;
     private String tId;
-    private String wechaterId;
-    private OrderStatus orderStatus;
+    private String oWechaterId;
+    private OrderStatus oStatus;
+    private StepStatus oStepStatus;
+
+    private String oSearchPicUrl;
+    private String oTaoCmd;
+    private String oTaobaoOrderId;
+    private String oTaobaoOrderPicUrl;
+    private String oWechatPayPicUrl;
 
     private Date createTime;
     private Date updateTime;

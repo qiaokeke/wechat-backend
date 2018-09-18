@@ -14,6 +14,7 @@ public class TaskView {
     private String tChargeAmout;
     private String tProgress;
     private String tTotal;
+    private int tPrecent;
     private String tGiftPicUrl;
     private String tGift;
     private String tReward;

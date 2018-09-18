@@ -43,7 +43,7 @@ public class TaskController {
     }
 
     @GetMapping("/pageTasks")
-    public ResponseBean getPublishTasksByPage(@RequestParam int page,@RequestParam int size,@RequestParam(required = false) String taskId,@RequestParam(required = false) String sellerId,@RequestParam(required = false) String taskStatus){
+    public ResponseBean getTasksByPage(@RequestParam int page,@RequestParam int size,@RequestParam(required = false) String taskId,@RequestParam(required = false) String sellerId,@RequestParam(required = false) String taskStatus){
         Pageable pageable = new PageRequest(page-1,size);
         ResponsePage responsePage = null;
         if(taskId!=null && !taskId.equals("")){
