@@ -36,7 +36,7 @@ public class SysTaskRepositoryTest {
     public void testSaveTashs(){
         taskRepository.deleteAll();
 
-        for (int i=0;i<1000;i++){
+        for (int i=0;i<100;i++){
             Task task = new Task();
             task.setTId(String.valueOf(i+10000));
             task.setTSellerId(IdStrategy.buildTaskId());

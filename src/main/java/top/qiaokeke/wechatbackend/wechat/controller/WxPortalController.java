@@ -89,6 +89,7 @@ public class WxPortalController {
 
     @PostMapping(produces = "text/plain;charset=utf-8",value = "/getUrl")
     public String buildOauth2Url(@PathVariable String appid, @RequestParam String url){
+        logger.info(url);
         final WxMpService wxService = WxMpConfiguration.getMpServices().get(appid);
         return wxService.oauth2buildAuthorizationUrl(url,WxConsts.OAuth2Scope.SNSAPI_USERINFO,null);
     }

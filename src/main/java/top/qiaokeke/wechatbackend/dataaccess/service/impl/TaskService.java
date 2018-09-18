@@ -165,20 +165,8 @@ public class TaskService implements ITaskService {
     private List<TaskView> taskPage2Views(Page<Task> tasks){
         List<TaskView> taskViews = new LinkedList<>();
         for(Task task: tasks){
-            TaskView taskView = new TaskView();
-            taskView.setTId(task.getTId());
-            taskView.setTName(task.getTName());
-            taskView.setTSellerId(task.getTSellerId());
-            taskView.setTChargeAmout(task.getTChargeAmout());
-            taskView.setTTotal(String.valueOf(task.getTTotal()));
-            taskView.setTProgress(String.valueOf(task.getTProgress()));
-            taskView.setTPreheatTime(Format.yyyy_MM_dd_HH_mm_ssDateString(task.getTPreheatTime()));
-            taskView.setTPublishTime(Format.yyyy_MM_dd_HH_mm_ssDateString(task.getTPublishTime()));
-            taskView.setTFinishTime(Format.yyyy_MM_dd_HH_mm_ssDateString(task.getTFinishTime()));
-            taskView.setTGift(task.getTGift());
-            taskView.setTGiftPicUrl(task.getTGiftPicUrl());
-            taskView.setTReward(task.getTReward());
-            taskViews.add(taskView);
+
+            taskViews.add(task2View(task));
         }
 
         return taskViews;
@@ -187,14 +175,26 @@ public class TaskService implements ITaskService {
     private List<TaskView> tasks2TaskViews(List<Task> tasks){
         List<TaskView> taskViews = new LinkedList<>();
         for (Task task : tasks){
-            TaskView taskView = new TaskView();
-            taskView.setTId(task.getTId());
-            taskView.setTGift(task.getTGift());
-            taskView.setTGiftPicUrl(task.getTGiftPicUrl());
-            taskView.setTReward(task.getTReward());
-            taskView.setTChargeAmout(task.getTChargeAmout());
-            taskViews.add(taskView);
+            taskViews.add(task2View(task));
         }
         return taskViews;
+    }
+
+    private TaskView task2View(Task task){
+        TaskView taskView = new TaskView();
+        taskView.setTId(task.getTId());
+        taskView.setTName(task.getTName());
+        taskView.setTSellerId(task.getTSellerId());
+        taskView.setTChargeAmout(task.getTChargeAmout());
+        taskView.setTTotal(String.valueOf(task.getTTotal()));
+        taskView.setTProgress(String.valueOf(task.getTProgress()));
+        taskView.setTPreheatTime(Format.yyyy_MM_dd_HH_mm_ssDateString(task.getTPreheatTime()));
+        taskView.setTPublishTime(Format.yyyy_MM_dd_HH_mm_ssDateString(task.getTPublishTime()));
+        taskView.setTFinishTime(Format.yyyy_MM_dd_HH_mm_ssDateString(task.getTFinishTime()));
+        taskView.setTGift(task.getTGift());
+        taskView.setTGiftPicUrl(task.getTGiftPicUrl());
+        taskView.setTReward(task.getTReward());
+        taskView.setTPrecent(task.getTProgress()*100/task.getTTotal());
+        return taskView;
     }
 }
